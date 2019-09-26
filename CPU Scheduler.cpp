@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <vector> 
 
 using namespace std;
@@ -37,16 +38,24 @@ class Process {
 		void setState(string state) { this->state = state;}
 };
 
+void reset(){
+	PID_COUNTER = 0; 
+	TIME = 0;
+	WAITTIME = 0;
+	TURNAROUND = 0;
+	ISFULL = false;
+}
+
 //creates and adds a process to a given process Table
 void createProcess(vector<Process> &PTable) 
 {
 	int arrival = PID_COUNTER * 6;
-	int PID = PID_COUNTER++;
+//	int PID = PID_COUNTER++;
 	int burst = rand() % 200;
 	string state = "ready";
 	int remaining = burst;
 	
-	Process p(PID, arrival, burst, state, remaining);
+	Process p(PID_COUNTER++, arrival, burst, state, remaining);
 	//PTable.append(p);
 	PTable.push_back(p);
 	
@@ -69,10 +78,7 @@ int getShortestP(vector<Process> &PTable) {
 void FCFS(vector<Process> &PTable)
 {
 	//initialize them again so we can use them again, one function after the other
-	PID_COUNTER = 0; 
-	TIME = 0;
-	WAITTIME = 0;
-	TURNAROUND = 0;
+	reset();
 	//var to keep track of when to create a new process
 	long createP = 0;
 	
@@ -81,28 +87,27 @@ void FCFS(vector<Process> &PTable)
 		createProcess(PTable);
 	
 	for(int i = 0; i < 10000; i++) {
+		
+		WAITTIME = TIME - PTable[i].getArrival() - PTable[i].getBurst();
+		TURNAROUND = WAITTIME + PTable[i].getBurst();
+		TIME += PTable[i].getBurst();	
+		
 		createP += PTable[i].getBurst();
 		
 		//creates a process every 6 seconds
 		while(createP >= 6 and !ISFULL) {
 			createProcess(PTable);
 			createP -= 6;
-		}
-		
-		WAITTIME = TIME - PTable[i].getArrival() - PTable[i].getBurst();
-		TURNAROUND = WAITTIME + PTable[i].getBurst();
-		TIME += PTable[i].getBurst();		
+		}	
 	}
 }
 
 
 void SRT(vector<Process> &PTable, int q) 
 {
+		cout<<"Shortest Flag"<<endl;
 	//initialize them again so we can use them again, one function after the other
-	PID_COUNTER = 0; 
-	TIME = 0;
-	WAITTIME = 0;
-	TURNAROUND = 0;
+	reset();
 	
 	//fills the table with some elements so the table wont be empty to begin with
 	for(int i = 0; i < 100; i++) 
@@ -147,11 +152,9 @@ void SRT(vector<Process> &PTable, int q)
 
 void RR(vector<Process> &PTable, int q) {
 	
+	cout<<"Round Robin Flag"<<endl;
 	//initialize them again so we can use them again, one function after the other
-	PID_COUNTER = 0; 
-	TIME = 0;
-	WAITTIME = 0;
-	TURNAROUND = 0;
+	reset();
 	
 	//var used to keep track of the index of the process in the CPU
 	int index = 0;
@@ -207,10 +210,7 @@ int main()
 	vector<Process> PTable2;
 	vector<Process> PTable3;
 	vector<Process> PTable4;
-	/*
-	FCFS(PTable1);
-	cout << "For FCFS, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
-	*/
+
 	RR(PTable3, 10);	
 	cout << "For RR 10, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 	
@@ -219,7 +219,10 @@ int main()
 	
 	SRT(PTable2, 105);
 	cout << "For STF, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
-	
+
+	FCFS(PTable1);
+	cout << "For FCFS, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+
 	
 	
 	
