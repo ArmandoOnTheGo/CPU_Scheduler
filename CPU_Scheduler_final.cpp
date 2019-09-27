@@ -123,7 +123,6 @@ void SRT(vector<Process> &PTable, int q)
 			TURNAROUND += WAITTIME + REMAINING;
 			
 			CREATEP += REMAINING;
-			//if(remaining == 0) createP += 6;
 			PTable[INDEX].setRemaining(0);
 			PTable[INDEX].setState("terminated");
 			//removes element index from the table
