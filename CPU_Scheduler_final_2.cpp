@@ -15,6 +15,7 @@ int ARRIVAL = 0;
 int REMAINING = 0;
 int INDEX = 0;
 int CREATEP = 0;
+int A_COUNTER = 0;
 
 //lets us know if all elements of the array are done in RR
 bool isDone = false;
@@ -47,27 +48,31 @@ class Process {
 };
 
 //creates and adds a process to a given process Table
-void createProcess(vector<Process> &PTable) 
+void createProcess(vector<Process> &PTable, int lambda) 
 {
-	//makes sure that the table doesnt exceed 10000
-	if (PID_COUNTER >= 10000){
-		ISFULL = true;
-		return;
+	for(int i = 0; i < lambda; i++) {
+		
+		//makes sure that the table doesnt exceed 10000
+		if (PID_COUNTER >= 10000){
+			ISFULL = true;
+			return;
+		}
+		
+		int arrival = A_COUNTER * 6;
+		int PID = PID_COUNTER++;
+		int burst = rand() % 200;
+		string state = "ready";
+		int remaining = burst;
+		
+		//global variables used to check if our calculations are correct
+		TOTAL += burst;
+		TOTALPID++;
+		
+		Process p(PID, arrival, burst, state, remaining);
+	
+		PTable.push_back(p);
 	}
-	
-	int arrival = PID_COUNTER * 6;
-	int PID = PID_COUNTER++;
-	int burst = rand() % 200;
-	string state = "ready";
-	int remaining = burst;
-	
-	//global variables used to check if our calculations are correct
-	TOTAL += burst;
-	TOTALPID++;
-	
-	Process p(PID, arrival, burst, state, remaining);
-
-	PTable.push_back(p);
+	A_COUNTER++;
 }
 
 //returns the index of the process with the least remaining time from a process table
@@ -96,6 +101,7 @@ void reset()
 	REMAINING = 0;
 	CREATEP = 0;
 	INDEX = 0;
+	A_COUNTER = 0;
 }
 
 void SRT(vector<Process> &PTable, int q) 
@@ -105,10 +111,11 @@ void SRT(vector<Process> &PTable, int q)
 	
 	//fills the table with some elements so the table wont be empty to begin with
 	for(int i = 0; i < 100; i++) 
-		createProcess(PTable);
+		createProcess(PTable, 1);
 	
 	//main loop, repeats until 10000 processes are done
 	while(PTable.size() != 0) {
+		//returns the element with the shortest remaining time
 		INDEX = getShortestP(PTable);
 		
 		//this is just for clarity in the code
@@ -118,14 +125,13 @@ void SRT(vector<Process> &PTable, int q)
 		if(REMAINING <= q) {
 			//adds to TIME the amount of time the process was in the CPU
 			TIME += REMAINING;
-			
 			WAITTIME += TIME - ARRIVAL - REMAINING;
 			TURNAROUND += WAITTIME + REMAINING;
 			
 			CREATEP += REMAINING;
-			//if(remaining == 0) createP += 6;
 			PTable[INDEX].setRemaining(0);
 			PTable[INDEX].setState("terminated");
+			
 			//removes element index from the table
 			PTable.erase(PTable.begin() + INDEX);
 		}
@@ -133,27 +139,28 @@ void SRT(vector<Process> &PTable, int q)
 		else if (REMAINING > q) {
 			TIME += q;
 			TURNAROUND += q;
-			//subtracts q from the reamining time
+			
+			//subtracts q from the reamining time of the element
 			PTable[INDEX].setRemaining(REMAINING - q);
 			CREATEP += q;
 		}
 		
 		//creates a process every 6 seconds
 		while(CREATEP >= 6 and !ISFULL) {
-			createProcess(PTable);
+			createProcess(PTable, 1);
 			CREATEP -= 6;
 		}
 	}
 }
 
 //assume all the elements of PTable are sorted by arrival time so go through the array linearly
-void FCFS(vector<Process> &PTable)
+void FCFS(vector<Process> &PTable, int lambda)
 {
 	reset();
 	
 	//fills the table with some elements so the table wont be empty to begin with
-	for(int i = 0; i < 100; i++) 
-		createProcess(PTable);
+	for(int i = 0; i < 10; i++) 
+		createProcess(PTable, 1);
 	
 	for(int i = 0; i < 10000; i++) {
 		//this is just for clarity in the code
@@ -164,7 +171,7 @@ void FCFS(vector<Process> &PTable)
 
 		//creates a process every 6 seconds
 		while(CREATEP >= 6 and !ISFULL) {
-			createProcess(PTable);
+			createProcess(PTable, lambda);
 			CREATEP -= 6;
 		}
 		
@@ -174,7 +181,7 @@ void FCFS(vector<Process> &PTable)
 	}
 }
 
-void RR(vector<Process> &PTable, int q) 
+void RR(vector<Process> &PTable, int q, int lambda) 
 {
 	//resets global variables so we can run the functions one after the other
 	reset();
@@ -183,8 +190,8 @@ void RR(vector<Process> &PTable, int q)
 	bool isDone = false;
 	
 	//fills the table with some elements so the table wont be empty to begin with
-	for(int i = 0; i < 100; i++) 
-		createProcess(PTable);
+	for(int i = 0; i < 10; i++) 
+		createProcess(PTable, 1);
 	
 	//loops over the array until there are no more elements that need to access the CPU
 	while(!isDone) {
@@ -205,6 +212,7 @@ void RR(vector<Process> &PTable, int q)
 		else {
 			TIME += q;
 			TURNAROUND += q;
+			
 			//subtracts q from the reamining time
 			PTable[INDEX].setRemaining(REMAINING - q);
 			CREATEP += q;
@@ -212,7 +220,7 @@ void RR(vector<Process> &PTable, int q)
 		
 		//creates a process every 6 seconds
 		while(CREATEP >= 6 and !ISFULL) {
-			createProcess(PTable);
+			createProcess(PTable, lambda);
 			CREATEP -= 6;
 		}
 		
@@ -235,18 +243,29 @@ int main()
 	vector<Process> PTable2;
 	vector<Process> PTable3;
 	vector<Process> PTable4;
-
-	FCFS(PTable1);
-	cout << "For FCFS, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
-	cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
 	
-	RR(PTable3, 10);	
-	cout << "For RR 10, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
-	cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
+	/*
+	for(int i = 1; i < 31; i++)
+		createProcess(PTable1, i);
+	*/
 	
-	RR(PTable4, 200);
-	cout << "For RR 200, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
-	cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
+	for(int i = 1; i < 31; i++) {
+		FCFS(PTable1, i);
+		cout << "For FCFS" << i << ", the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+		cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
+	}	
+	
+	for(int i = 1; i < 31; i++) {
+		RR(PTable3, 10, i);	
+		cout << "For RR 10, #" << i << " the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+		cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
+	}
+	
+	for(int i = 1; i < 31; i++) {
+		RR(PTable4, 200, i);
+		cout << "For RR 200, #" << i << " the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+		cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
+	}
 	
 	SRT(PTable2, 10);
 	cout << "For STF, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
