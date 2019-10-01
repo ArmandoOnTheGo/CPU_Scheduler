@@ -66,11 +66,16 @@ void createProcess(vector<Process> &PTable)
 
 //returns the index of the process with the least remaining time from a process table
 int getShortestP(vector<Process> &PTable) {
+	int shortTime = PTable[0].getRemaining();
 	int index = 0;
-	for(int i = 0; i < PTable.size(); i++) {
-		if(PTable[i].getState() == "ready" and PTable[i].getRemaining() < PTable[index].getRemaining())
-			index = i;
+	int coverage = 1;
+	for(int i = 0; i < PTable.size(); i++){
+		for(int j = 0; j < PTable.size(); j++){
+		if(PTable[i].getRemaining() < PTable[index].getRemaining() && PTable[i].getState() == "ready")
+		index=i;
+		}
 	}
+	
 	return index;
 }
 
@@ -132,22 +137,21 @@ void SRT(vector<Process> &PTable, int q)
 			createP += PTable[index].getRemaining();
 			PTable[index].setRemaining(0);
 			PTable[index].setState("terminated");	
+			continue;
 		}
 		
-		else {
-			TIME += q;
-			TURNAROUND += q;
-			//subtracts q from the reamining time
-			PTable[index].setRemaining(PTable[index].getRemaining() - q);
-			createP += q;
-		}
-		
-		//creates a process every 6 seconds
-		while(createP >= 6 and !ISFULL) {
+		TIME += q;
+		TURNAROUND += q;
+		//subtracts q from the reamining time
+		PTable[index].setRemaining(PTable[index].getRemaining() - q);
+		createP += q;
+			
+			//creates a process every 6 seconds
+		while(createP >= 6) {
 			createProcess(PTable);
 			createP -= 6;
 		}
-	}
+   }
 }
 
 void RR(vector<Process> &PTable, int q) {
@@ -212,16 +216,16 @@ int main()
 	vector<Process> PTable4;
 
 	RR(PTable3, 10);	
-	cout << "For RR 10, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+	cout << "For RR 10, PID: " << PID_COUNTER <<" the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 	
 	RR(PTable4, 200);
-	cout << "For RR 200, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+	cout << "For RR 200, PID: " << PID_COUNTER <<" the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 	
 	SRT(PTable2, 105);
-	cout << "For STF, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+	cout << "For STF, PID: " << PID_COUNTER <<" the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 
 	FCFS(PTable1);
-	cout << "For FCFS, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
+	cout << "For FCFS, PID: " << PID_COUNTER <<" the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 
 	
 	
