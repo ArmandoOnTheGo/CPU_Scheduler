@@ -1,0 +1,9 @@
+package cpu;
+
+import java.util.ArrayList;
+
+public class FCFS {
+	public ArrayList<Process> PTable;
+	int lambda;
+
+}

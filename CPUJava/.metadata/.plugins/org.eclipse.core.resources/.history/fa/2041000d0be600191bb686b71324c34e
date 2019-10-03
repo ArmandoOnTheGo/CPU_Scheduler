@@ -1,0 +1,10 @@
+package cpu;
+
+import java.util.ArrayList;
+
+public class algorithm {
+	
+	class algorithm{};
+	//creates and adds a process to a given process Table
+
+}

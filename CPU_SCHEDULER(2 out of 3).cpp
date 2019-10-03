@@ -188,6 +188,7 @@ void RR(vector<Process> &PTable, int q, int lambda)
 	
 	//lets us know if all elements of the array are done in RR
 	bool isDone = false;
+	int terminated = 0;
 	
 	//fills the table with some elements so the table wont be empty to begin with
 	for(int i = 0; i < 10; i++) 
@@ -207,6 +208,8 @@ void RR(vector<Process> &PTable, int q, int lambda)
 			CREATEP += REMAINING;
 			PTable[INDEX].setRemaining(0);
 			PTable[INDEX].setState("terminated");	
+			
+			terminated++;
 		}
 		
 		else {
@@ -218,26 +221,29 @@ void RR(vector<Process> &PTable, int q, int lambda)
 			CREATEP += q;
 		}
 		
+		
+		
+		if(terminated == 10000)
+			break;
+		
 		//creates a process every 6 seconds
 		while(CREATEP >= 6 and !ISFULL) {
 			createProcess(PTable, lambda);
 			CREATEP -= 6;
 		}
 		
-		isDone = true;
-		
 		//loop to make sure that the array is not done
 		for(int i = 1; i < PTable.size(); i++) {
 			if(PTable[i - 1].getState() == "ready") {
-				//cout << "element " << i << " state: " << PTable[i].getState() << endl;
 				isDone = false;
 				break;
 			}
 			//cout <<	isDone << endl;
 		}
 		//incr index while making sure it loops back to the start
-		INDEX = (INDEX + 1) % 10000;
+		INDEX = (INDEX + 1) % PTable.size();
 	}
+	
 }
 
 int main()
@@ -262,14 +268,15 @@ int main()
 		RR(PTable3, 10, i);	
 		cout << "For RR 10, #" << i << " the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 		cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
-	}
-	*//*
+		reset();
+	}*/
+	
 	for(int i = 1; i < 31; i++) {
 		RR(PTable4, 200, i);
 		cout << "For RR 200, #" << i << " the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;
 		cout << "The actual total time is: " << TOTAL << ", and PID is: " << TOTALPID << endl << endl;
 	}
-	*/
+	
 	for(int i = 1; i < 31; i++) {
 		SRT(PTable2, 10);
 		cout << "For STF, the total is: " << TIME << ", Turnaround time is: " << TURNAROUND << ", Waiting time is: " << WAITTIME << endl;

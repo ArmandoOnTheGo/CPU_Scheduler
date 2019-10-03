@@ -1,0 +1,26 @@
+package cpu;
+
+public class Process {
+	private	int PID;
+	private	int arrival;
+	private int burst;
+	private String state;
+	private int remaining;
+	
+	public Process(int PID, int arrival, int burst, String state, int remaining) {
+			this->PID = PID;
+			this->arrival = arrival;
+			this->burst = burst;
+			this->state = state;
+			this->remaining = remaining;
+		}
+		
+		int getPID() { return PID;}
+		int getArrival() { return arrival;}
+		int getBurst() { return burst;}
+		string getState() { return state;}
+		int getRemaining() { return remaining;}
+		
+		void setRemaining(int remaining) { this->remaining = remaining;}
+		void setState(string state) { this->state = state;}
+};

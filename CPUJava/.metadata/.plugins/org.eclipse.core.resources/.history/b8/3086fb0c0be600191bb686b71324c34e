@@ -1,0 +1,34 @@
+package cpu;
+
+import java.util.ArrayList;
+
+public class algorithm {
+	//creates and adds a process to a given process Table
+	public void createProcess(ArrayList<Process> PTable, int lambda) 
+	{
+		for(int i = 0; i < lambda; i++) {
+			
+			//makes sure that the table doesn't exceed 10000
+			if (PID_COUNTER >= 10000){
+				ISFULL = true;
+				return;
+			}
+			
+			int arrival = A_COUNTER * 6;
+			int PID = PID_COUNTER++;
+			int burst = rand() % 200;
+			String state = "ready";
+			int remaining = burst;
+			
+			//global variables used to check if our calculations are correct
+			TOTAL += burst;
+			TOTALPID++;
+			
+			Process p = new Process(PID, arrival, burst, state, remaining);
+		
+			PTable.add(p);
+		}
+		A_COUNTER++;
+	}
+
+}

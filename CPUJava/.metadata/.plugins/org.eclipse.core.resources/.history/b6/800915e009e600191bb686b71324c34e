@@ -1,0 +1,32 @@
+package cpu;
+
+import java.util.ArrayList;
+
+public class FCFS {
+	public FCFS(ArrayList<Process> PTable, int lambda)
+	{
+		reset();
+		
+		//fills the table with some elements so the table wont be empty to begin with
+		for(int i = 0; i < 10; i++) 
+			createProcess(PTable, 1);
+		
+		for(int i = 0; i < 10000; i++) {
+			//this is just for clarity in the code
+			ARRIVAL = PTable.get(i).getArrival();
+			BURST = PTable.get(i).getBurst();
+			
+			CREATEP += BURST;
+
+			//creates a process every 6 seconds
+			while(CREATEP >= 6 && !ISFULL) {
+				createProcess(PTable, lambda);
+				CREATEP -= 6;
+			}
+			
+			WAITTIME = TIME - ARRIVAL - BURST;
+			TURNAROUND = WAITTIME + BURST;
+			TIME += BURST;		
+		}
+	}
+}
