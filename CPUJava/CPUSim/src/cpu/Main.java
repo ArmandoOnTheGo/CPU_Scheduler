@@ -1,36 +1,38 @@
 package cpu;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class Main {
 	
 
-	int PID_COUNTER = 0; 
-	long CPU_TIME = 0;
-	long WAITCPU_TIME = 0;
-	long TURNAROUND = 0;
+	double PID_COUNTER = 0; 
+	double CPU_TIME = 0;
+	double WAITCPU_TIME = 0;
+	double TURNAROUND = 0;
 	boolean ISFULL = false; //keeps track of if the PTable is full
-	int TOTAL = 0;
-	int TOTALPID = 0;
-	int BURST = 0;
-	int ARRIVAL = 0;
-	int REMAINING = 0;
+	double TOTAL = 0;
+	double TOTALPID = 0;
+	double BURST = 0;
+	double ARRIVAL = 0;
+	double REMAINING = 0;
 	int INDEX = 0;
 	int CREATEP = 0;
-	int A_COUNTER = 0;
-	long TIME = 0;
+	double A_COUNTER = 0;
+	double TIME = 0;
 	boolean isDone = false;
+	Random rand = new Random();
 	
 	public Main(String[] args) {
 		
-		/*for(int i = 1; i < 31; i++) {
+		for(int i = 1; i < 31; i++) {
 			FCFS(new ArrayList<Process>(), i);
-			System.out.println("For FCFS" + i + ", the total is: " + CPU_TIME + ", Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
-			System.out.println("The actual total CPU_TIME is: " + TOTAL + ", and PID is: " + TOTALPID);
-		}*/	
+			System.out.println("For FCFS " + i + ", \nthe total time is: " + TIME + ", "
+					+ "\nTurnaround CPU_TIME is: " + TURNAROUND/10000 + ", "
+					+ "\nWaiting CPU_TIME is: " + WAITCPU_TIME/10000);
+			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", \nPID is: " + TOTALPID);
+		}
 		
-		/*
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), 10, i);
 			System.out.println("For RR 10, #" + i + " the total is: " + CPU_TIME + ", Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
@@ -42,14 +44,13 @@ public class Main {
 			RR(new ArrayList<Process>(), 200, i);
 			System.out.println("For RR 200, #" + i + " the total is: " + CPU_TIME + ", Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + TOTAL + ", and PID is: " + TOTALPID);
-		}*/
+		}
 		
 		for(int i = 1; i < 31; i++) {
 			SRT(new ArrayList<Process>(), 10);
 			System.out.println("For STF, the total is: " + TIME + ", Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + TOTAL + ", and PID is: " + TOTALPID);
 		}
-	
 	}
 
 	void createProcess(ArrayList<Process> PTable, int lambda) 
@@ -62,19 +63,38 @@ public class Main {
 				return;
 			}
 			
-			int arrival = A_COUNTER * 6;
-			int PID = PID_COUNTER++;
-			int burst = ThreadLocalRandom.current().nextInt(1, 200 + 1);;
+			double arrival = TIME+(1/lambda);
+			double PID = PID_COUNTER++;
+			double burst = genexp(lambda);
 			String state = "ready";
-			int remaining = burst;
+			double remaining = burst;
 			
-			//global variables used to check if our calculations are correct
-			TOTAL += burst;
 			TOTALPID++;
 		
 			PTable.add(new Process(PID, arrival, burst, state, remaining));
 		}
-		A_COUNTER++;
+		TIME++;
+	}
+	
+	double genexp(double lambda)
+	{
+		double u;
+		double x;
+		x = 0;
+		while (x == 0)
+			{
+				u = Math.abs(rand.nextDouble());
+				x = (-1/lambda)*Math.log(u);
+			}
+		return x;
+	}
+	
+	void sortByArrival(ArrayList<Process> PTable) {
+		int index = 0;
+		for(int i = 0; i < PTable.size(); i++) {
+			if(PTable.get(i).getArrival() < PTable.get(index).getArrival() && PTable.get(i).getState() == "ready")
+				index = i;
+		}
 	}
 
 
@@ -82,7 +102,7 @@ public class Main {
 	int getShortestP(ArrayList<Process> PTable) {
 		int index = 0;
 		for(int i = 1; i < PTable.size(); i++) {
-			if(PTable.get(i).getRemaining() <= PTable.get(i).getRemaining() && PTable.get(i).getState() == "ready") {
+			if(PTable.get(i).getRemaining() <= PTable.get(index).getRemaining() && PTable.get(i).getState() == "ready") {
 				index = i;
 			}
 		}
@@ -113,26 +133,19 @@ public class Main {
 		
 		reset();
 		
-		//fills the table with some elements so the table wont be empty to begin with
-		for(int i = 0; i < 10; i++) 
-			createProcess(PTable, 1);
+		createProcess(PTable, lambda);
 		
 		for(int i = 0; i < 10000; i++) {
+			
 			//this is just for clarity in the code
 			ARRIVAL = PTable.get(i).getArrival();
 			BURST = PTable.get(i).getBurst();
 			
-			CREATEP += BURST;
-
-			//creates a process every 6 seconds
-			while(CREATEP >= 6 && !ISFULL) {
-				createProcess(PTable, lambda);
-				CREATEP -= 6;
-			}
+			CPU_TIME += BURST;
+			WAITCPU_TIME += TIME - ARRIVAL - BURST;
+			TURNAROUND += TIME - ARRIVAL + BURST;
 			
-			WAITCPU_TIME = CPU_TIME - ARRIVAL - BURST;
-			TURNAROUND = WAITCPU_TIME + BURST;
-			CPU_TIME += BURST;		
+			createProcess(PTable, lambda);
 		}
 	}
 	
@@ -149,9 +162,6 @@ public class Main {
 		
 		//main loop, repeats until 10000 processes are done
 		while(PTable.size() != 0) {
-			
-			if(TIME % 6 == 0)
-				createProcess(PTable, lambda);
 			
 			//returns the element with the shortest remaining CPU_TIME
 			INDEX = getShortestP(PTable);
@@ -178,8 +188,8 @@ public class Main {
 				//subtracts q from the remaining CPU_TIME of the element
 				PTable.get(INDEX).setRemaining(--REMAINING);
 	
-			//Each iteration of the loop last 1 second.
-			TIME++;
+
+			createProcess(PTable, lambda);
 		}
 	}
 	
@@ -193,8 +203,10 @@ public class Main {
 		int terminated = 0;
 		
 		//fills the table with some elements so the table wont be empty to begin with
-		for(int i = 0; i < 10; i++) 
-			createProcess(PTable, 10);
+//		for(int i = 0; i < 10; i++) 
+//			createProcess(PTable, 10);
+		
+		createProcess(PTable, lambda);
 		
 		//loops over the array until there are no more elements that need to access the CPU
 		while(!isDone) {
@@ -225,14 +237,15 @@ public class Main {
 			
 			
 			
+			
 			if(terminated == 10000)
 				break;
 			
 			//creates a process every 6 seconds
-			while(CREATEP >= 6 && !ISFULL) {
+//			while(CREATEP >= 6 && !ISFULL) {
 				createProcess(PTable, lambda);
-				CREATEP -= 6;
-			}
+//				CREATEP -= 6;
+//			}
 			
 			//loop to make sure that the array is not done
 			for(int i = 1; i < PTable.size(); i++) {

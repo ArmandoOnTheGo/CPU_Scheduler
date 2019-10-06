@@ -1,13 +1,13 @@
 package cpu;
 
 public class Process {
-	private	int PID;
-	private	int arrival;
-	private int burst;
+	private	double PID;
+	private	double arrival;
+	private double burst;
 	private String state;
-	private int remaining;
+	private double remaining;
 	
-	public Process(int PID, int arrival, int burst, String state, int remaining) {
+	public Process(double PID, double arrival, double burst, String state, double remaining) {
 			this.PID = PID;
 			this.arrival = arrival;
 			this.burst = burst;
@@ -15,12 +15,12 @@ public class Process {
 			this.remaining = remaining;
 		}
 		
-		int getPID() { return PID;}
-		int getArrival() { return arrival;}
-		int getBurst() { return burst;}
+		double getPID() { return PID;}
+		double getArrival() { return arrival;}
+		double getBurst() { return burst;}
 		String getState() { return state;}
-		int getRemaining() { return remaining;}
+		double getRemaining() { return remaining;}
 		
-		void setRemaining(int remaining) { this.remaining = remaining;}
+		void setRemaining(double remaining) { this.remaining = remaining;}
 		void setState(String state) { this.state = state;}
 };
