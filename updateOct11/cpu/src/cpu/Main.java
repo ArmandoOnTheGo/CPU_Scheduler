@@ -5,8 +5,6 @@ import java.util.Random;
 import java.util.Timer;
 
 public class Main {
-	
-
 	double PID_COUNTER = 0; 
 	double CPU_TIME = 0;
 	double WAITCPU_TIME = 0;
@@ -28,54 +26,50 @@ public class Main {
 	ArrayList<DataCollected> RR200Data = new ArrayList<DataCollected>();
 	Random rand = new Random();
 	
-	public Main(String[] args) {
-		//TODO Store values in another object.
-		//to be read for excel with all values of each lambda
+	public Main(String[] args) {	
 		/*
 		for(int i = 1; i < 31; i++) {
 			FCFS(new ArrayList<Process>(), i);
-			FCFSData.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			FCFSData.add(new DataCollected("FCFS " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			FCFSData.get(i-1).display();
 			System.out.println("For FCFS " + i + ","
-					+ "\nTurnaround CPU_TIME is: " + TURNAROUND + ", "
-					+ "\nWaiting CPU_TIME is: " + WAITCPU_TIME);
-			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", \nPID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
+					+ " Turnaround CPU_TIME = " + TURNAROUND + ", "
+					+ " Waiting CPU_TIME is: " + WAITCPU_TIME + "CPU_TIME = " + CPU_TIME +  " Average Q = " + AVG_QUEUE);
 		}
-		
-		for(int i = 1; i < 31; i++) {
-			SRT(new ArrayList<Process>(), i);
-			SRTData.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
-			System.out.println("For STF "+i+", the total is: " + TIME + ", "
-					+ "\nTurnaround CPU_TIME is: " + TURNAROUND + ", \nWaiting CPU_TIME is: " + WAITCPU_TIME);
-			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
-		}*/
+		*/
 		/*
 		for(int i = 1; i < 31; i++) {
+			SRT(new ArrayList<Process>(), i);
+			SRTData.add(new DataCollected("SRT " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			SRTData.get(i-1).display();
+			System.out.println("STF "+i+", CPU_TIME = " + CPU_TIME + ", WAITCPU_TIME = " + WAITCPU_TIME + ", TURNAROUND = " + TURNAROUND + ", AVG_Q = " + AVG_QUEUE);
+		}
+		*/
+		
+		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .01, i);
-			RR10Data.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			RR10Data.add(new DataCollected("RR10 #" + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			RR10Data.get(i-1).display();
 			System.out.println("For RR 10, #" + i + " the total is: " + CPU_TIME + ", "
 					+ "Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
 			reset();
 		}
-		*/
+		/*
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .2, i);
-			RR200Data.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			RR200Data.add(new DataCollected("RR200 #" + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
+			RR200Data.get(i-1).display();
 			System.out.println("For RR 200, #" + i + " the total is: " + CPU_TIME + ", "
 					+ "Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
 		}
+		*/
 	}
 
 	void createProcess(ArrayList<Process> PTable, int lambda) 
 	{
 		for(int i = 0; i < lambda; i++) {
-			
-//			//makes sure that the table doesn't exceed 10000
-//			if (PID_COUNTER >= 10000){
-//				ISFULL = true;
-//				return;
-//			}
 			
 			double arrival = TIME + (genexp(lambda));
 			double PID = PID_COUNTER++;
@@ -144,12 +138,10 @@ public class Main {
 		AVG_QUEUE = 0;
 	}
 
-	//THIS IS WORKING
 	void FCFS(ArrayList<Process> PTable, int lambda)
 	{
 		
 		reset();
-//		Timer t = new Timer(100, updateClockAction);
 		createProcess(PTable, lambda);
 		int terminated = 0;
 		while (terminated < 10000) {
@@ -160,23 +152,16 @@ public class Main {
 			TIME+=BURST;
 			
 			CPU_TIME += BURST;
-//			System.out.println(terminated+" ARRIVAL:" + ARRIVAL + " TIME: " + TIME+ "BURST: " + BURST);
-//			System.out.println("WAITIME: " + WAITCPU_TIME);
 			WAITCPU_TIME += TIME - ARRIVAL - BURST;
-//			if(WAITCPU_TIME < 0) WAITCPU_TIME = 0;
 			
 			TURNAROUND += TIME - ARRIVAL + BURST;
-//			System.out.println(BURST);
 			PTable.remove(arrivalIndex);
 			terminated++;
 			if(terminated % 100 == 0)
-			{
 				AVG_QUEUE += PTable.size();
-			}
-//			if(!ISFULL) {
+
 			createProcess(PTable, lambda);
 			TIME++;
-//			}
 		}
 		AVG_QUEUE /= 100;
 	}
@@ -185,10 +170,6 @@ public class Main {
 	{
 		//reset the global variables
 		reset();
-		
-		//fills the table with some elements so the table wont be empty to begin with
-		//for(int i = 0; i < 10; i++) 
-		//createProcess(PTable, 1);
 		
 		createProcess(PTable, lambda);
 		
@@ -201,20 +182,14 @@ public class Main {
 			//returns the element with the shortest remaining CPU_TIME
 			INDEX = getShortestP(PTable);
 
-			//System.out.println(INDEX);
-			//System.out.println("Step 1");
 			//this is just for clarity in the code
 			ARRIVAL = PTable.get(INDEX).getArrival();
 			REMAINING = PTable.get(INDEX).getRemaining();
 			BURST = PTable.get(INDEX).getBurst();
 
-			//System.out.println(REMAINING);
-			
-			//TODO FIX THE ALGORITHM FOR SRT
-			
-//			System.out.println("Step 2");
 			if(REMAINING < 0.1) {
 				//adds to CPU_TIME the amount of CPU_TIME the process was in the CPU
+				TIME += BURST;
 				CPU_TIME += BURST;
 				
 				WAITCPU_TIME += TIME - ARRIVAL - BURST;
@@ -223,18 +198,13 @@ public class Main {
 				PTable.get(INDEX).setRemaining(0);
 				terminated++;
 				if(terminated % 100 == 0)
-				{
 					AVG_QUEUE += PTable.size();
-				}
+					
 				//removes element index from the table
 				PTable.remove(INDEX);
 			}
 
 			else PTable.get(INDEX).setRemaining(REMAINING-.1);
-//			subtracts q from the remaining CPU_TIME of the element
-//			System.out.println("Step 3");
-
-//			if(ISFULL != true)
 			createProcess(PTable, lambda);
 
 			TIME++;
@@ -251,21 +221,17 @@ public class Main {
 		}
 	}
 	
-	//GOOD AND DONE MY GUY
 	void RR(ArrayList<Process> PTable, double q, int lambda) 
 	{
 		//resets global variables so we can run the functions one after the other
 		reset();
 		
 		//lets us know if all elements of the array are done in RR
-		//boolean isDone = false;
 		int terminated = 0;
 		
 		//fills the table with some elements so the table wont be empty to begin with
-//		for(int i = 0; i < 10; i++) 
-//			createProcess(PTable, 10);
-		
-		createProcess(PTable, lambda);
+		for(int i = 0; i < 100; i++) 
+			createProcess(PTable, 10);
 		
 		//loops over the array until there are no more elements that need to access the CPU
 		while(terminated < 10000)//was !isDone
@@ -278,11 +244,10 @@ public class Main {
 			
 			if(REMAINING <= q) 
 			{
-				System.out.println("ASdADs");
+				TIME += REMAINING;
 				CPU_TIME += REMAINING;
 				WAITCPU_TIME += TIME - ARRIVAL - REMAINING;
 				TURNAROUND += WAITCPU_TIME + BURST;
-//				CREATEP += REMAINING;
 				PTable.remove(INDEX);
 				terminated++;
 
@@ -292,36 +257,24 @@ public class Main {
 			}
 			
 			else {
+				TIME += q;
 				CPU_TIME += q;
-//				TURNAROUND += q;
 				
 				//subtracts q from the remaining CPU_TIME
 				PTable.get(INDEX).setRemaining(REMAINING - q);
-//				CREATEP += q;
+
 			}
-			
-			/*
-			if(terminated == 10000)
-				break;
-			*/
-			//creates a process every 6 seconds
-//			while(CREATEP >= 6 && !ISFULL) {
+
 				createProcess(PTable, lambda);
 				TIME++;
-//				CREATEP -= 6;
-//			}
-			
-			//loop to make sure that the array is not done
-//			for(int i = 1; i < PTable.size(); i++) {
-//				if(PTable.get(i).getState() == "ready") {
-//					isDone = false;
-//					break;
-//				}
-//			}
-				
+
 			//incr index while making sure it loops back to the start
-			INDEX = (INDEX + 1) % 10000;
+			if(PTable.size() < 10000)
+				INDEX = (INDEX + 1) % PTable.size();
+			else
+				INDEX = (INDEX + 1) % 10000;
 		}
+		//gets the average size of the queue
 		AVG_QUEUE /= 100;
 	}
 }
