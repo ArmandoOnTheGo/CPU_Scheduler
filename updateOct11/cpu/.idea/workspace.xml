@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e260ee65-af97-4e71-97af-b1535b67a8cd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/cpu/cpu/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/cpu/cpu/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Main.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,15 +95,18 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/cpu/Main.java</url>
-          <line>301</line>
-          <option name="timeStamp" value="1" />
+          <line>201</line>
+          <properties class="cpu.Main" method="FCFS">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/cpu/Main.java</url>
-          <line>343</line>
-          <option name="timeStamp" value="2" />
+          <line>227</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

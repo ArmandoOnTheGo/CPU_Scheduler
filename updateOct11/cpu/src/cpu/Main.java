@@ -3,11 +3,8 @@ package cpu;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Timer;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
+/*import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileOutputStream;*/
 
 
 public class Main {
@@ -41,7 +38,7 @@ public class Main {
 	Random rand = new Random();
 
 
-	public void writeDataToExcel(ArrayList<DataCollected> data, String filename, String schedulerName)
+	/*public void writeDataToExcel(ArrayList<DataCollected> data, String filename, String schedulerName)
 	{
 
 			Workbook workbook = new XSSFWorkbook();
@@ -87,10 +84,9 @@ public class Main {
 			{
 				System.out.println(e.getMessage());
 			}
-	}
+	}*/
 	public Main(String[] args)
 	{
-
 		for(int i = 1; i < 31; i++) {
 			FCFS(new ArrayList<Process>(), i);
 			FCFSData.add(new DataCollected("FCFS " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
@@ -100,7 +96,7 @@ public class Main {
 					+ " Waiting CPU_TIME is: " + WAITCPU_TIME + "CPU_TIME = " + CPU_TIME +  " Average Q = " + AVG_QUEUE);
 		}
 
-		writeDataToExcel(FCFSData, "FCFS.xlsx", "FIRST COME FIRST SERVE");
+//		writeDataToExcel(FCFSData, "FCFS.xlsx", "FIRST COME FIRST SERVE");
 		for(int i = 1; i < 31; i++) {
 			SRT(new ArrayList<Process>(), i);
 			SRTData.add(new DataCollected("SRT " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
@@ -108,7 +104,7 @@ public class Main {
 			System.out.println("STF "+i+", CPU_TIME = " + CPU_TIME + ", WAITCPU_TIME = " + WAITCPU_TIME + ", TURNAROUND = " + TURNAROUND + ", AVG_Q = " + AVG_QUEUE);
 		}
 
-		writeDataToExcel(SRTData, "SRT.xlsx", "SHORTEST REMAINING TIME");
+//		writeDataToExcel(SRTData, "SRT.xlsx", "SHORTEST REMAINING TIME");
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .01, i);
 			RR10Data.add(new DataCollected("RR10 #" + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
@@ -119,7 +115,7 @@ public class Main {
 			reset();
 		}
 
-		writeDataToExcel(RR10Data, "round_robin10.xlsx", "Round Robin 10");
+//		writeDataToExcel(RR10Data, "round_robin10.xlsx", "Round Robin 10");
 
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .2, i);
@@ -129,7 +125,7 @@ public class Main {
 					+ "Turnaround CPU_TIME is: " + TURNAROUND + ", Waiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
 		}
-		writeDataToExcel(RR200Data, "round_robin200.xlsx", "Round Robin 200");
+//		writeDataToExcel(RR200Data, "round_robin200.xlsx", "Round Robin 200");
 	}
 
 	void createProcess(ArrayList<Process> PTable, int lambda) 
