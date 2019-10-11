@@ -1,9 +1,12 @@
 package cpu;
 
-public class Driver {
+import java.io.IOException;
 
-	public static void main(String[] args) {
+public class Driver
+{
+	public static void main(String[] args)
+	{
 		System.out.println("Running Simulation: ");
-		Main CPU = new Main(args);
+			Main CPU = new Main(args);
 	}
 }
