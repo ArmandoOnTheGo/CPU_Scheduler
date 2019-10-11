@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e260ee65-af97-4e71-97af-b1535b67a8cd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_apache_poi_poi_4_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_apache_poi_poi_ooxml_4_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cpu.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cpu.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Driver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpu/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu/Main.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -103,12 +96,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/cpu/Main.java</url>
-          <line>289</line>
+          <line>301</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/cpu/Main.java</url>
-          <line>331</line>
+          <line>343</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

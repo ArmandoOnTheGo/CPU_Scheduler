@@ -49,20 +49,32 @@ public class Main {
 			Iterator<DataCollected> iterator = data.iterator();
 
 			int rowIndex = 0;
+			Row titlerow = sheet.createRow(rowIndex++);
+			Cell cell0 = titlerow.createCell(0);
+			cell0.setCellValue("AVG_QUEUE_SIZE");
+			Cell cell1 = titlerow.createCell(1);
+			cell1.setCellValue("CPU_TIME");
+			Cell cell2 = titlerow.createCell(2);
+			cell2.setCellValue("TURNAROUND");
+			Cell cell3 = titlerow.createCell(3);
+			cell3.setCellValue("WAITCPU_TIME");
+			Cell cell4 = titlerow.createCell(4);
+			cell4.setCellValue("TIME");
+
 			while(iterator.hasNext())
 			{
 				DataCollected schedulerData = iterator.next();
 				Row row = sheet.createRow(rowIndex++);
-				Cell cell0 = row.createCell(0);
-				cell0.setCellValue(schedulerData.AVG_QUEUE_SIZE);
-				Cell cell1 = row.createCell(1);
-				cell1.setCellValue(schedulerData.CPU_TIME);
-				Cell cell2 = row.createCell(2);
-				cell2.setCellValue(schedulerData.TURNAROUND);
-				Cell cell3 = row.createCell(3);
-				cell3.setCellValue(schedulerData.WAITCPU_TIME);
-				Cell cell4 = row.createCell(4);
-				cell4.setCellValue(schedulerData.TIME);
+				Cell cell5 = row.createCell(0);
+				cell5.setCellValue(schedulerData.AVG_QUEUE_SIZE);
+				Cell cell6 = row.createCell(1);
+				cell6.setCellValue(schedulerData.CPU_TIME);
+				Cell cell7 = row.createCell(2);
+				cell7.setCellValue(schedulerData.TURNAROUND);
+				Cell cell8 = row.createCell(3);
+				cell8.setCellValue(schedulerData.WAITCPU_TIME);
+				Cell cell9 = row.createCell(4);
+				cell9.setCellValue(schedulerData.TIME);
 			}
 			try
 			{
