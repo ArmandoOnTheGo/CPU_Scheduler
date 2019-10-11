@@ -1,4 +1,4 @@
-package src.cpu;
+package cpu;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,7 +48,7 @@ public class Main {
 					+ "\nTurnaround CPU_TIME is: " + TURNAROUND + ", \nWaiting CPU_TIME is: " + WAITCPU_TIME);
 			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
 		}*/
-
+		/*
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .01, i);
 			RR10Data.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
@@ -57,7 +57,7 @@ public class Main {
 			System.out.println("The actual total CPU_TIME is: " + CPU_TIME + ", and PID is: " + TOTALPID + "Average Q = " + AVG_QUEUE);
 			reset();
 		}
-		
+		*/
 		for(int i = 1; i < 31; i++) {
 			RR(new ArrayList<Process>(), .2, i);
 			RR200Data.add(new DataCollected(CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
@@ -258,7 +258,7 @@ public class Main {
 		reset();
 		
 		//lets us know if all elements of the array are done in RR
-		boolean isDone = false;
+		//boolean isDone = false;
 		int terminated = 0;
 		
 		//fills the table with some elements so the table wont be empty to begin with
@@ -268,25 +268,27 @@ public class Main {
 		createProcess(PTable, lambda);
 		
 		//loops over the array until there are no more elements that need to access the CPU
-		while(!isDone)
+		while(terminated < 10000)//was !isDone
 		{
+			
 			
 			//this is just for clarity in the code
 			ARRIVAL = PTable.get(INDEX).getArrival();
 			REMAINING = PTable.get(INDEX).getRemaining();
 			
-			if(REMAINING <= q) {
-				WAITCPU_TIME += CPU_TIME - ARRIVAL - REMAINING;
-				TURNAROUND += WAITCPU_TIME + BURST;
+			if(REMAINING <= q) 
+			{
+				System.out.println("ASdADs");
 				CPU_TIME += REMAINING;
+				WAITCPU_TIME += TIME - ARRIVAL - REMAINING;
+				TURNAROUND += WAITCPU_TIME + BURST;
 //				CREATEP += REMAINING;
 				PTable.remove(INDEX);
 				terminated++;
 
+				//takes the average # of elements in the queue
 				if(terminated % 100 == 0)
-				{
 					AVG_QUEUE += PTable.size();
-				}
 			}
 			
 			else {
@@ -298,9 +300,10 @@ public class Main {
 //				CREATEP += q;
 			}
 			
+			/*
 			if(terminated == 10000)
 				break;
-			
+			*/
 			//creates a process every 6 seconds
 //			while(CREATEP >= 6 && !ISFULL) {
 				createProcess(PTable, lambda);
@@ -317,7 +320,7 @@ public class Main {
 //			}
 				
 			//incr index while making sure it loops back to the start
-			INDEX = (INDEX + 1) % PTable.size();
+			INDEX = (INDEX + 1) % 10000;
 		}
 		AVG_QUEUE /= 100;
 	}

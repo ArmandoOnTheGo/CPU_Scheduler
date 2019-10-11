@@ -1,4 +1,4 @@
-package src.cpu;
+package cpu;
 
 public class DataCollected {
 	double CPU_TIME = 0;

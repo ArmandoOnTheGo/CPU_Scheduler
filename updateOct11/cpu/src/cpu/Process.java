@@ -1,4 +1,4 @@
-package src.cpu;
+package cpu;
 
 public class Process {
 	private	double PID;
