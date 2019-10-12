@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.apache.poi.ss.usermodel.Cell;
+/*import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,7 +36,7 @@ public class Main {
 	Random rand = new Random();
 
 	//code to write data to an excel file
-	public void writeDataToExcel(ArrayList<DataCollected> data, String filename, String schedulerName)
+/*	public void writeDataToExcel(ArrayList<DataCollected> data, String filename, String schedulerName)
 	{
 
 			Workbook workbook = new XSSFWorkbook();
@@ -82,7 +82,7 @@ public class Main {
 			{
 				System.out.println(e.getMessage());
 			}
-	}
+	}*/
 
 	public Main(String[] args)
 	{
@@ -91,7 +91,7 @@ public class Main {
 			FCFS(new ArrayList<Process>(), i);
 			FCFSData.add(new DataCollected("FCFS " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
 		}
-		writeDataToExcel(FCFSData, "FCFS.xlsx", "FIRST COME FIRST SERVE");
+//		writeDataToExcel(FCFSData, "FCFS.xlsx", "FIRST COME FIRST SERVE");
 
 		//runs the SRT scheduling algorithm for lambda ranging from 1 to 31
 		for(int i = 1; i < 31; i++)
@@ -99,7 +99,7 @@ public class Main {
 			SRT(new ArrayList<Process>(), i);
 			SRTData.add(new DataCollected("SRT " + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
 		}
-		writeDataToExcel(SRTData, "SRT.xlsx", "SHORTEST REMAINING TIME");
+//		writeDataToExcel(SRTData, "SRT.xlsx", "SHORTEST REMAINING TIME");
 
 		//runs the RR 0.01 scheduling algorithm for lambda ranging from 1 to 31
 		for(int i = 1; i < 31; i++)
@@ -108,7 +108,7 @@ public class Main {
 			RR10Data.add(new DataCollected("RR10 #" + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
 			reset();
 		}
-		writeDataToExcel(RR10Data, "round_robin10.xlsx", "Round Robin 10");
+//		writeDataToExcel(RR10Data, "round_robin10.xlsx", "Round Robin 10");
 
 		//runs the RR 0.2 scheduling algorithm for lambda ranging from 1 to 31
 		for(int i = 1; i < 31; i++)
@@ -116,7 +116,7 @@ public class Main {
 			RR(new ArrayList<Process>(), .2, i);
 			RR200Data.add(new DataCollected("RR200 #" + i, CPU_TIME, WAITCPU_TIME, TURNAROUND, TIME, AVG_QUEUE));
 		}
-		writeDataToExcel(RR200Data, "round_robin200.xlsx", "Round Robin 200");
+//		writeDataToExcel(RR200Data, "round_robin200.xlsx", "Round Robin 200");
 	}
 
 	//function to create processes and add them to a Process table that is passed
